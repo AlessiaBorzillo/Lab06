@@ -1,4 +1,4 @@
-# Lab 06 - Soluzione
+# Lab 06
 
 #### Argomenti
 

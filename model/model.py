@@ -36,6 +36,20 @@ class DepositoStrumenti:
             :return: una lista con tutti gli strumenti presenti oppure None
         """
         # TODO
+        cnx = get_connection() #mi connetto al database
+        strumenti = []
+        if cnx is not None:
+            cursor = cnx.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM strumento") # qui creo query
+            for row in cursor:
+                strumenti.append(Strumento(row["codice"], row["tipo"], row["marca"], row["anno_acquisto"], row["valore"], row["disponibile"]))
+            cnx.close()
+            cursor.close()
+            return strumenti
+        else:
+            print("Nessuna connesione al database")
+            return None
+
 
     def cerca_strumenti_per_tipo(self, tipo) -> list[Strumento] | None:
         """
@@ -44,3 +58,27 @@ class DepositoStrumenti:
             :return: una lista con tutti gli strumenti del tipo indicato oppure None
         """
         # TODO
+        cnx = get_connection()
+        strumenti_per_tipo = []
+        query = (""" SELECT *
+                        FROM strumento
+                        WHERE tipo = %s """) # %s scrittura standard: 'dovro selezionare qualcosa'
+        if cnx is not None:
+            cursor = cnx.cursor(dictionary=True)
+            cursor.execute(query, (tipo,))
+            for row in cursor:
+                strumenti_per_tipo.append(Strumento(row["codice"], row["tipo"], row["marca"],
+                                           row["anno_acquisto"], row["valore"],
+                                           row["disponibile"]))
+            cnx.close()
+            cursor.close()
+            return strumenti_per_tipo
+        else:
+            print("Nessuna connesione al database")
+            return None
+
+
+        #crea struttura dati sulla base del mio database
+
+
+
